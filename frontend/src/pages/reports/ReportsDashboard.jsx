@@ -1,0 +1,1 @@
+export default function Placeholder() { return <div className='card'><h2 className='text-2xl font-bold'>Coming Soon</h2></div> }
