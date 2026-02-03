@@ -267,7 +267,6 @@ school-Erp-system/
 │   ├── manage.py
 │   ├── requirements.txt            # Python dependencies
 │   ├── .env.example               # Environment variables template
-│   ├── Dockerfile
 │   └── .gitignore
 │
 ├── frontend/                        # React Frontend
@@ -311,10 +310,8 @@ school-Erp-system/
 │   ├── vite.config.js            # Vite configuration
 │   ├── tailwind.config.js        # Tailwind CSS configuration
 │   ├── postcss.config.js
-│   ├── Dockerfile
 │   └── .gitignore
 │
-├── docker-compose.yml            # Docker orchestration
 └── README.md                     # This file
 ```
 
@@ -390,23 +387,6 @@ school-Erp-system/
 
    Frontend will be available at `http://localhost:3000`
 
-### Using Docker (Recommended for Production)
-
-1. **Build and run all services:**
-   ```bash
-   docker-compose up --build
-   ```
-
-2. **Run migrations in Docker:**
-   ```bash
-   docker-compose exec backend python manage.py migrate
-   ```
-
-3. **Create superuser in Docker:**
-   ```bash
-   docker-compose exec backend python manage.py createsuperuser
-   ```
-
 ---
 
 ## 🔗 API Endpoints
@@ -467,7 +447,6 @@ school-Erp-system/
 - [x] API service layer with axios
 - [x] Authentication state management (Zustand)
 - [x] Responsive layout with Tailwind CSS
-- [x] Docker configuration for both frontend and backend
 
 ### 🚧 In Progress
 - [ ] Implement all frontend pages (currently placeholders)
@@ -508,7 +487,6 @@ school-Erp-system/
 - **Forms:** React Hook Form + Zod
 
 ### DevOps
-- **Containerization:** Docker + Docker Compose
 - **Version Control:** Git
 - **Development:** Hot reload for both frontend and backend
 
