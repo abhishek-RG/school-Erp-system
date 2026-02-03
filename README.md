@@ -136,7 +136,7 @@ Core entities:
 ### Backend
 - Django
 - Django REST Framework
-- PostgreSQL
+- SQLlite(For Dev)
 
 ### Frontend (Planned)
 - React / Next.js
@@ -214,3 +214,348 @@ This project is collaboratively built by a team using best practices in:
 
 ## 📄 License
 To be defined.
+
+---
+
+## 📁 Project Structure
+
+The project has been organized with a clean separation between frontend and backend:
+
+```
+school-Erp-system/
+├── backend/                          # Django Backend
+│   ├── config/                       # Django project configuration
+│   │   ├── __init__.py
+│   │   ├── settings.py              # Main settings with JWT, CORS, etc.
+│   │   ├── urls.py                  # Main URL routing
+│   │   ├── asgi.py
+│   │   └── wsgi.py
+│   ├── apps/                        # Django applications
+│   │   ├── authentication/          # User authentication & JWT
+│   │   │   ├── models.py           # Custom User model with roles
+│   │   │   ├── serializers.py      # User & JWT serializers
+│   │   │   ├── views.py            # Login, register, profile views
+│   │   │   ├── urls.py
+│   │   │   └── admin.py
+│   │   ├── departments/             # Department management
+│   │   │   ├── models.py           # Department model
+│   │   │   ├── serializers.py
+│   │   │   ├── views.py
+│   │   │   ├── urls.py
+│   │   │   └── admin.py
+│   │   ├── finance/                 # Income & Expense Management
+│   │   │   ├── models.py           # Income, Expense, Categories
+│   │   │   ├── serializers.py
+│   │   │   ├── views.py            # CRUD + Approval workflow
+│   │   │   ├── urls.py
+│   │   │   └── admin.py
+│   │   ├── budget/                  # Budget Planning
+│   │   │   ├── models.py           # Budget allocation & tracking
+│   │   │   ├── serializers.py
+│   │   │   ├── views.py            # Budget approval & locking
+│   │   │   ├── urls.py
+│   │   │   └── admin.py
+│   │   ├── salary/                  # Payroll Management
+│   │   │   ├── models.py           # Employee & Salary records
+│   │   │   ├── serializers.py
+│   │   │   ├── views.py
+│   │   │   ├── urls.py
+│   │   │   └── admin.py
+│   │   └── reports/                 # Financial Analytics
+│   │       ├── views.py            # Monthly reports, Budget vs Actual
+│   │       └── urls.py
+│   ├── manage.py
+│   ├── requirements.txt            # Python dependencies
+│   ├── .env.example               # Environment variables template
+│   ├── Dockerfile
+│   └── .gitignore
+│
+├── frontend/                        # React Frontend
+│   ├── public/
+│   ├── src/
+│   │   ├── components/             # Reusable UI components
+│   │   │   ├── common/            # Shared components
+│   │   │   │   └── MainLayout.jsx
+│   │   │   ├── finance/           # Finance module components
+│   │   │   ├── budget/            # Budget module components
+│   │   │   ├── reports/           # Reports components
+│   │   │   └── salary/            # Salary components
+│   │   ├── pages/                 # Page components
+│   │   │   ├── auth/
+│   │   │   │   └── Login.jsx
+│   │   │   ├── dashboard/
+│   │   │   │   └── Dashboard.jsx
+│   │   │   ├── finance/
+│   │   │   │   ├── IncomeList.jsx
+│   │   │   │   └── ExpenseList.jsx
+│   │   │   ├── budget/
+│   │   │   │   └── BudgetList.jsx
+│   │   │   ├── salary/
+│   │   │   │   └── SalaryList.jsx
+│   │   │   └── reports/
+│   │   │       └── ReportsDashboard.jsx
+│   │   ├── services/              # API services
+│   │   │   ├── api.js            # Axios instance with interceptors
+│   │   │   ├── authService.js    # Authentication API calls
+│   │   │   ├── financeService.js # Finance API calls
+│   │   │   └── reportsService.js # Reports API calls
+│   │   ├── context/              # State management
+│   │   │   └── authStore.js      # Zustand auth store
+│   │   ├── utils/                # Utility functions
+│   │   ├── assets/               # Static assets
+│   │   ├── App.jsx               # Main App component with routing
+│   │   ├── main.jsx              # Entry point
+│   │   └── index.css             # Global styles
+│   ├── index.html
+│   ├── package.json
+│   ├── vite.config.js            # Vite configuration
+│   ├── tailwind.config.js        # Tailwind CSS configuration
+│   ├── postcss.config.js
+│   ├── Dockerfile
+│   └── .gitignore
+│
+├── docker-compose.yml            # Docker orchestration
+└── README.md                     # This file
+```
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Python 3.11+
+- Node.js 18+
+- PostgreSQL (or use SQLite for development)
+- Redis (for Celery tasks)
+
+### Backend Setup
+
+1. **Navigate to backend directory:**
+   ```bash
+   cd backend
+   ```
+
+2. **Create virtual environment:**
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
+
+3. **Install dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Setup environment variables:**
+   ```bash
+   cp .env.example .env
+   # Edit .env with your settings
+   ```
+
+5. **Run migrations:**
+   ```bash
+   python manage.py makemigrations
+   python manage.py migrate
+   ```
+
+6. **Create superuser:**
+   ```bash
+   python manage.py createsuperuser
+   ```
+
+7. **Run development server:**
+   ```bash
+   python manage.py runserver
+   ```
+
+   Backend will be available at `http://localhost:8000`
+   Admin panel: `http://localhost:8000/admin`
+
+### Frontend Setup
+
+1. **Navigate to frontend directory:**
+   ```bash
+   cd frontend
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Run development server:**
+   ```bash
+   npm run dev
+   ```
+
+   Frontend will be available at `http://localhost:3000`
+
+### Using Docker (Recommended for Production)
+
+1. **Build and run all services:**
+   ```bash
+   docker-compose up --build
+   ```
+
+2. **Run migrations in Docker:**
+   ```bash
+   docker-compose exec backend python manage.py migrate
+   ```
+
+3. **Create superuser in Docker:**
+   ```bash
+   docker-compose exec backend python manage.py createsuperuser
+   ```
+
+---
+
+## 🔗 API Endpoints
+
+### Authentication
+- `POST /api/auth/register/` - User registration
+- `POST /api/auth/login/` - User login (JWT)
+- `POST /api/auth/token/refresh/` - Refresh JWT token
+- `GET /api/auth/profile/` - Get user profile
+
+### Departments
+- `GET /api/departments/` - List all departments
+- `POST /api/departments/` - Create department
+- `GET /api/departments/{id}/` - Get department details
+- `PATCH /api/departments/{id}/` - Update department
+
+### Finance
+- `GET /api/finance/incomes/` - List incomes
+- `POST /api/finance/incomes/` - Record income
+- `GET /api/finance/expenses/` - List expenses
+- `POST /api/finance/expenses/` - Record expense
+- `POST /api/finance/expenses/{id}/approve/` - Approve expense
+- `POST /api/finance/expenses/{id}/mark_paid/` - Mark as paid
+
+### Budget
+- `GET /api/budget/` - List budgets
+- `POST /api/budget/` - Create budget
+- `POST /api/budget/{id}/approve/` - Approve budget
+- `POST /api/budget/{id}/lock/` - Lock budget
+
+### Salary
+- `GET /api/salary/employees/` - List employees
+- `POST /api/salary/employees/` - Add employee
+- `GET /api/salary/salaries/` - List salary records
+- `POST /api/salary/salaries/` - Create salary record
+- `POST /api/salary/salaries/{id}/mark_paid/` - Mark salary as paid
+
+### Reports
+- `GET /api/reports/monthly-expense/` - Monthly expense report
+- `GET /api/reports/budget-vs-actual/` - Budget variance analysis
+- `GET /api/reports/income-vs-expense/` - Income vs expense summary
+- `GET /api/reports/department-summary/` - Department-wise summary
+
+---
+
+## 📊 Current Development Status
+
+### ✅ Completed
+- [x] Complete backend file structure with Django
+- [x] Custom User model with role-based access
+- [x] Department management module
+- [x] Finance module (Income & Expense tracking)
+- [x] Budget planning module with approval workflow
+- [x] Salary & Payroll management
+- [x] Financial reports & analytics engine
+- [x] JWT authentication setup
+- [x] Complete frontend file structure with React + Vite
+- [x] API service layer with axios
+- [x] Authentication state management (Zustand)
+- [x] Responsive layout with Tailwind CSS
+- [x] Docker configuration for both frontend and backend
+
+### 🚧 In Progress
+- [ ] Implement all frontend pages (currently placeholders)
+- [ ] Data visualization charts for reports
+- [ ] Expense approval workflow UI
+- [ ] Budget tracking dashboard
+- [ ] Export reports to PDF/Excel
+
+### 📋 Next Steps
+1. Run migrations and test all backend models
+2. Populate sample data for testing
+3. Implement frontend pages for each module
+4. Create chart components using Recharts
+5. Add form validation with React Hook Form + Zod
+6. Implement real-time updates with React Query
+7. Add comprehensive error handling
+8. Write unit tests for critical functions
+
+---
+
+## 🎨 Tech Stack Summary
+
+### Backend
+- **Framework:** Django 4.2 + Django REST Framework
+- **Authentication:** JWT (djangorestframework-simplejwt)
+- **Database:** PostgreSQL (production), SQLite (development)
+- **Task Queue:** Celery + Redis
+- **API Documentation:** DRF Browsable API
+
+### Frontend
+- **Framework:** React 18
+- **Build Tool:** Vite
+- **Routing:** React Router v6
+- **State Management:** Zustand
+- **Data Fetching:** TanStack React Query
+- **Styling:** Tailwind CSS
+- **Charts:** Recharts
+- **Forms:** React Hook Form + Zod
+
+### DevOps
+- **Containerization:** Docker + Docker Compose
+- **Version Control:** Git
+- **Development:** Hot reload for both frontend and backend
+
+---
+
+## 🔐 Default User Roles
+
+1. **SUPER_ADMIN** - Full system access
+2. **FINANCE_ADMIN** - Income, expense, budgets, reports
+3. **DEPARTMENT_HEAD** - View department budget & spending
+4. **AUDITOR** - Read-only access
+
+---
+
+## 💡 Key Features
+
+### Financial Management
+- ✅ Track all income sources with categorization
+- ✅ Record expenses with department tagging
+- ✅ Multi-level expense approval workflow
+- ✅ Payment mode tracking (Cash, UPI, Bank, Cheque)
+- ✅ Receipt/document upload support
+
+### Budget Planning
+- ✅ Yearly and monthly budget allocation
+- ✅ Budget approval and locking mechanism
+- ✅ Real-time budget utilization tracking
+- ✅ Budget vs. actual variance analysis
+
+### Reporting & Analytics
+- ✅ Monthly expense reports (department & category-wise)
+- ✅ Income vs. Expense summary
+- ✅ Budget variance reports
+- ✅ Department-wise financial summaries
+
+### Payroll Management
+- ✅ Employee records management
+- ✅ Monthly salary tracking
+- ✅ Salary breakdown (base, allowances, deductions)
+- ✅ Payment status tracking
+
+---
+
+## 📞 Support & Contact
+For questions or issues, please open an issue in the repository.
+
+---
+
+**Last Updated:** February 3, 2026  
+**Project Status:** Core structure complete, frontend implementation in progress
