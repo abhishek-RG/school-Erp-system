@@ -4,7 +4,10 @@
 ## 📌 Overview
 This project is a **School ERP System** with an initial and strong focus on **Finance Resource Planning** for school administration.
 
-The goal is to build a **centralized, transparent, and data-driven finance system** that helps school management:
+
+
+
+The goal is to build a *centralized, transparent, and data-driven finance system* that helps school management:
 - Track all income sources
 - Track all expenses (department-wise)
 - Manage salaries and operational costs
