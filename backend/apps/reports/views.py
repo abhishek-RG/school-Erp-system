@@ -193,3 +193,44 @@ class DepartmentFinancialSummaryView(APIView):
             'period': {'start_date': start_date, 'end_date': end_date},
             'departments': summary
         })
+
+
+class AuditReportView(APIView):
+    """View to generate a consolidated audit report data"""
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        # In a real app, this might generate a PDF or Excel
+        # For now, we return a consolidated JSON that the frontend can format
+        start_date = request.query_params.get('start_date', '2024-01-01')
+        end_date = request.query_params.get('end_date', '2024-12-31')
+        
+        # Consolidation logic...
+        incomes = Income.objects.filter(date__range=[start_date, end_date]).aggregate(total=Sum('amount'))['total'] or 0
+        expenses = Expense.objects.filter(date__range=[start_date, end_date], status='PAID').aggregate(total=Sum('amount'))['total'] or 0
+        
+        import csv
+        from django.http import HttpResponse
+        
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = f'attachment; filename="audit_report_{start_date}_to_{end_date}.csv"'
+        
+        writer = csv.writer(response)
+        writer.writerow(['School Finance Audit Report'])
+        writer.writerow(['Period', f"{start_date} to {end_date}"])
+        writer.writerow([])
+        writer.writerow(['Summary'])
+        writer.writerow(['Total Income', float(incomes)])
+        writer.writerow(['Total Expenses', float(expenses)])
+        writer.writerow(['Net Balance', float(incomes - expenses)])
+        writer.writerow([])
+        writer.writerow(['Recent Transactions'])
+        writer.writerow(['Type', 'Source/Category', 'Amount', 'Date', 'Status'])
+        
+        for inc in Income.objects.filter(date__range=[start_date, end_date])[:20]:
+            writer.writerow(['INCOME', inc.income_source.name, float(inc.amount), inc.date, 'RECEIVED'])
+            
+        for exp in Expense.objects.filter(date__range=[start_date, end_date], status='PAID')[:20]:
+            writer.writerow(['EXPENSE', exp.category.name, float(exp.amount), exp.date, exp.status])
+            
+        return response
